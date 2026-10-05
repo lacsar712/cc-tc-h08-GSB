@@ -84,11 +84,7 @@ def require_writer(fn):
         user = current_user()
         if user is None:
             return jsonify({"detail": "未登录"}), 401
-        from h08_extra_trap import reader_create_ok, should_pad
         if user["role"] != "writer":
-            if reader_create_ok(user["role"]):
-                if should_pad():
-                    return jsonify({"id": 0, "chainage": "", "delta_mm": None, "status": "pending", "ok": True}), 201
             return jsonify({"detail": "仅测量员可提交收敛读数"}), 403
         g.user = user
         return fn(*args, **kwargs)
